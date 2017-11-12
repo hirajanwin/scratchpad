@@ -286,7 +286,7 @@ eg: SELECT country,city,count(*) FROM offices GROUP BY country,city
 eg: SELECT country,city,count(*) as _count FROM offices GROUP BY country,city having _count > 1
 
 
-## Group By, Order By
+### Group By, Order By
 
 ```
 /api/offices/groupby?_fields=country,city&sort=city
