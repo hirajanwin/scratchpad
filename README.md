@@ -118,12 +118,14 @@ if you haven't on your system.
 
 
 
-## Relational Tables
+## Relational Tables 
 xmysql identifies foreign key relations automatically and provides GET api.
 ```
 /api/blogs/103/comments
 ```
 eg: blogs is parent table and comments is child table. API invocation will result in all comments for blog primary key 103.
+
+[:arrow_heading_up:](#api-overview)
 
 
 ## Support for composite primary keys
@@ -239,6 +241,7 @@ eg: filter of rows using _where is available for relational route URLs too.
 /api/tableName/findOne?_where=(id,eq,1)
 ```
 Works similar to list but only returns top/one result. Used in conjunction with _where
+[:arrow_heading_up:](#api-overview)
 
 ## Count
 ```
@@ -246,6 +249,7 @@ Works similar to list but only returns top/one result. Used in conjunction with 
 ```
 
 Returns number of rows in table
+[:arrow_heading_up:](#api-overview)
 
 ## Exists
 ```
@@ -253,7 +257,7 @@ Returns number of rows in table
 ```
 
 Returns true or false depending on whether record exists
-
+[:arrow_heading_up:](#api-overview)
 
 ## Group By Having as query params
 
