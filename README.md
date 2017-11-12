@@ -124,7 +124,6 @@ xmysql identifies foreign key relations automatically and provides GET api.
 /api/blogs/103/comments
 ```
 eg: blogs is parent table and comments is child table. API invocation will result in all comments for blog primary key 103.
-
 [:arrow_heading_up:](#api-overview)
 
 
@@ -260,6 +259,7 @@ Returns true or false depending on whether record exists
 [:arrow_heading_up:](#api-overview)
 
 ## Group By Having as query params
+[:arrow_heading_up:](#api-overview)
 
 ```
 /api/offices?_groupby=country
@@ -273,6 +273,7 @@ eg: SELECT country,count(1) as _count FROM offices GROUP BY country having _coun
 
 
 ## Group By Having as API
+[:arrow_heading_up:](#api-overview)
 
 ```
 /api/offices/groupby?_fields=country
@@ -291,6 +292,7 @@ eg: SELECT country,city,count(*) as _count FROM offices GROUP BY country,city ha
 
 
 ### Group By, Order By
+[:arrow_heading_up:](#api-overview)
 
 ```
 /api/offices/groupby?_fields=country,city&sort=city
@@ -309,6 +311,7 @@ eg: SELECT country,city,count(*) FROM offices GROUP BY country,city ORDER BY cit
 
 
 ## Aggregate functions
+[:arrow_heading_up:](#api-overview)
 
 ```
 http://localhost:3000/api/payments/aggregate?_fields=amount
@@ -353,6 +356,7 @@ response body
 eg: retrieves numeric aggregate can be done for multiple columns too 
 
 ## Union of multiple group by statements 
+[:arrow_heading_up:](#api-overview)
 
 :fire::fire:**[ HOTNESS ALERT ]**
 
@@ -414,6 +418,7 @@ response body
 
 
 ## Chart 
+[:arrow_heading_up:](#api-overview)
 
 :fire::fire: **[ HOTNESS ALERT ]**
 
@@ -422,6 +427,7 @@ Chart API returns distribution of a numeric column in a table
 It comes in three flavours
 
 1. Chart : With min, max, step in query params :fire::fire:
+[:arrow_heading_up:](#api-overview)
 
 This API returns the number of rows where amount is between (0,25000), (25001,50000) ...
 
@@ -460,6 +466,7 @@ Response
 ```
 
 2. Chart : With step array in params :fire::fire:
+[:arrow_heading_up:](#api-overview)
 
 This API returns distribution between the step array specified
 
@@ -491,6 +498,7 @@ Response
 ```
 
 3. Chart : with no params :fire::fire:
+[:arrow_heading_up:](#api-overview)
 
 This API figures out even distribution of a numeric column in table and returns the data
 
@@ -536,6 +544,8 @@ _fields in Chart API can only take numeric column as its argument.
 
 
 ## Run dynamic queries
+[:arrow_heading_up:](#api-overview)
+
 Dynamic queries on a database can be run by POST method to URL localhost:3000/dynamic 
 
 This is enabled only when using local mysql server i.e -h localhost or -h 127.0.0.1 option.
@@ -568,6 +578,7 @@ POST /dynamic/user/update
 
 
 ## Upload single file
+[:arrow_heading_up:](#api-overview)
 
 ```
 POST /upload
@@ -582,6 +593,8 @@ returns uploaded file name else 'upload failed'
 
 
 ## Upload multiple files
+[:arrow_heading_up:](#api-overview)
+
 ```
 POST /uploads
 ```
@@ -594,21 +607,28 @@ eg: curl --form files=@/Users/me/Desktop/a.png --form files=@/Users/me/Desktop/b
 returns uploaded file names as string
 
 ## Download file
+[:arrow_heading_up:](#api-overview)
+
 http://localhost:3000/download?name=fileName
 
 > For upload and download of files -> you can specify storage folder using -s option
 > Upload and download apis are available only with local mysql server 
 
 ## When to use ?
+[:arrow_heading_up:](#api-overview)
+
 * You need just REST APIs without much hassle for (ANY) MySql database.
 * You are learning new frontend frameworks and need REST APIs for your MySql database.
 * You are working on a demo, hacks etc
 
 ## When NOT to use ?
+[:arrow_heading_up:](#api-overview)
+
 * If you are in need of a full blown MVC framework, ACL, Authorisation etc - its early days please watch/star this repo. Thank you.
 
 
 ### Command line options
+[:arrow_heading_up:](#api-overview)
 
 ```
   Options:
@@ -645,6 +665,7 @@ http://localhost:3000/download?name=fileName
 
 
 # Docker
+[:arrow_heading_up:](#api-overview)
 
 Simply build with `docker build -t xmysql .` and run with `docker run -p 3000:3000 -d xmysql`
 
@@ -672,6 +693,7 @@ ENV DATABASE_NAME sakila
 
 
 # Tests : setup on local machine
+[:arrow_heading_up:](#api-overview)
 
 Login to mysql shell
 
