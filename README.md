@@ -59,25 +59,30 @@ Powered by popular node packages : ([express](https://github.com/expressjs/expre
 
 
 # Features
-* Generates API for **ANY** MySql database 
-* :fire::fire: Serves APIs irrespective of naming conventions of primary keys, foreign keys, tables etc
-* Support for composite primary keys
-* CRUD, List, FindOne, Count, Exists   
+* Generates API for **ANY** MySql database :fire::fire:
+* Serves APIs irrespective of naming conventions of primary keys, foreign keys, tables etc :fire::fire:
+* Support for composite primary keys :fire::fire:
+* REST API Usual suspects : CRUD, List, FindOne, Count, Exists, Distinct
+* Bulk insert, Bulk delete, Bulk read :fire:   
 * Relations
 * Pagination 
 * Sorting
-* :fire: Column filtering - Fields 
-* :fire: Row filtering - Where
+* Column filtering - Fields :fire:  
+* Row filtering - Where :fire:
 * Aggregate functions
-* :fire::fire: Group By, Having (as query params) 
-* :fire::fire: Group By, Having (as a separate API) 
-* :fire::fire: Multiple group by in one API 
-* :fire::fire: Chart API for numeric column 
-* Prototyping (features available with ONLY local MySql server)
+* Group By, Having (as query params) :fire::fire:  
+* Group By, Having (as a separate API) :fire::fire:  
+* Multiple group by in one API :fire::fire::fire::fire:
+* Chart API for numeric column :fire::fire::fire::fire::fire::fire:
+* Auto Chart API - (a gift for lazy while prototyping) :fire::fire::fire::fire::fire::fire:
+* xjoin - (MUST SEE : Handles joins) :rocket: :rocket: :rocket: :rocket: :rocket: 
+* Supports views  
+* Prototyping (features available when using local MySql server only)
     * Run dynamic queries :fire::fire::fire:
     * Upload single file
     * Upload multiple files
     * Download file
+
 
 Use HTTP clients like [Postman](https://www.getpostman.com/) or [similar tools](https://chrome.google.com/webstore/search/http%20client?_category=apps) to invoke REST API calls
 
@@ -92,29 +97,35 @@ if you haven't on your system.
 
 ## API Overview
 
-|# | HTTP Type | API URL                          | Comments                                               |
-|--|-----------|----------------------------------|--------------------------------------------------------- 
-|01| GET       | /                                | Gets all REST APIs                                     |
-|02| GET       | /api/tableName                   | Lists rows of table                                    |
-|03| POST      | /api/tableName                   | Create a new row                                       |
-|04| PUT       | /api/tableName                   | Replaces existing row with new row                     |
-|05| GET       | /api/tableName/:id               | Retrieves a row by primary key                         |
-|06| PATCH     | /api/tableName/:id               | Updates a row by primary key                           |
-|07| GET       | /api/tableName/findOne           | Works as list but gets single record matching criteria |
-|08| GET       | /api/tableName/count             | Count number of rows in a table                        |
-|09| GET       | /api/tableName/:id/exists        | True or false whether a row exists or not              |
-|10| DELETE    | /api/tableName/:id               | Delete a row by primary key                            |
-|11| GET       | [/api/parentTable/:id/childTable](#relational-tables)             | Get list of child table rows with parent table foreign key   | 
-|12| GET :fire:| [/api/tableName/aggregate](#aggregate-functions)                  | Aggregate results of numeric column(s)                 |
-|13| GET :fire:| [/api/tableName/groupby](#group-by-having-as-api)                 | Group by results of column(s)                          |
-|14| GET :fire:| [/api/tableName/ugroupby](#union-of-multiple-group-by-statements) | Multiple group by results using one call               |
-|15| GET :fire:| [/api/tableName/chart](#chart)                                    | Numeric column distribution based on (min,max,step) or(step array) or (automagic)|
-|16| GET :fire:| [/dynamic](#run-dynamic-queries)                                  | execute dynamic mysql statements with params           |
-|17| GET :fire:| [/upload](#upload-single-file)                                    | upload single file                                     |
-|18| GET :fire:| [/uploads](#upload-multiple-files)                                | upload multiple files                                  |
-|19| GET :fire:| [/download](#download-file)                                       | download a file                                        |
-|20| GET       | /api/tableName/describe| describe each table for its columns      |
-|21| GET       | /api/tables| get all tables in database                           |
+| HTTP Type | API URL                          | Comments                                               |
+|-----------|----------------------------------|--------------------------------------------------------- 
+| GET       | /                                | Gets all REST APIs                                     |
+| GET       | /api/tableName                   | Lists rows of table                                    |
+| POST      | /api/tableName                   | Create a new row                                       |
+| PUT       | /api/tableName                   | Replaces existing row with new row                     |
+| POST :fire:| /api/tableName/bulk             | Create multiple rows - send object array in request body|
+| GET  :fire:| /api/tableName/bulk             | Lists multiple rows - /api/tableName/bulk?_ids=1,2,3   |
+| DELETE :fire:| /api/tableName/bulk           | Deletes multiple rows - /api/tableName/bulk?_ids=1,2,3 |
+| GET       | /api/tableName/:id               | Retrieves a row by primary key                         |
+| PATCH     | /api/tableName/:id               | Updates row element by primary key                     |
+| DELETE    | /api/tableName/:id               | Delete a row by primary key                            |
+| GET       | /api/tableName/findOne           | Works as list but gets single record matching criteria |
+| GET       | /api/tableName/count             | Count number of rows in a table                        |
+| GET       | /api/tableName/distinct          | Distinct row(s) in table - /api/tableName/distinct?_fields=col1|
+| GET       | /api/tableName/:id/exists        | True or false whether a row exists or not              |
+| GET       | [/api/parentTable/:id/childTable](#relational-tables)             | Get list of child table rows with parent table foreign key   | 
+| GET :fire:| [/api/tableName/aggregate](#aggregate-functions)                  | Aggregate results of numeric column(s)                 |
+| GET :fire:| [/api/tableName/groupby](#group-by-having-as-api)                 | Group by results of column(s)                          |
+| GET :fire:| [/api/tableName/ugroupby](#union-of-multiple-group-by-statements) | Multiple group by results using one call               |
+| GET :fire:| [/api/tableName/chart](#chart)                                    | Numeric column distribution based on (min,max,step) or(step array) or (automagic)|
+| GET :fire:| [/api/tableName/autochart](#autochart)                                | Same as Chart but identifies which are numeric column automatically - gift for lazy while prototyping|
+| GET :fire:| [/api/xjoin](#xjoin)                                       | handles join                                        |
+| GET :fire:| [/dynamic](#run-dynamic-queries)                                  | execute dynamic mysql statements with params           |
+| GET :fire:| [/upload](#upload-single-file)                                    | upload single file                                     |
+| GET :fire:| [/uploads](#upload-multiple-files)                                | upload multiple files                                  |
+| GET :fire:| [/download](#download-file)                                       | download a file                                        |
+| GET       | /api/tableName/describe| describe each table for its columns      |
+| GET       | /api/tables| get all tables in database                           |
 
 
 
@@ -194,16 +205,22 @@ eg: gets all fields in table row but not checkNumber
 #### Comparison operators
 
 ```
-eq  -   '='
-ne  -   '!='
-gt  -   '>'
-gte -   '>='
-lt  -   '<'
-lte -   '<='
+eq      -   '='         -  (colName,eq,colValue)
+ne      -   '!='        -  (colName,ne,colValue)
+gt      -   '>'         -  (colName,gt,colValue)
+gte     -   '>='        -  (colName,gte,colValue)
+lt      -   '<'         -  (colName,lt,colValue)
+lte     -   '<='        -  (colName,lte,colValue)
+is      -   'is'        -  (colName,is,true/false/null)
+in      -   'in'        -  (colName,in,val1,val2,val3,val4)
+bw      -   'between'   -  (colName,bw,val1,val2) 
+like    -   'like'      -  (colName,like,~name)   note: use ~ in place of % 
+nlike   -   'not like'  -  (colName,nlike,~name)  note: use ~ in place of %
 ```
+
 #### Use of comparison operators
 ```
-/api/payments?_where=(checkNumber,eq,JM555205)
+/api/payments?_where=(checkNumber,eq,JM555205)~or((amount,gt,200)~and(amount,lt,2000))
 ```
 
 #### Logical operators
@@ -227,7 +244,7 @@ eg: complex logical expression
 
 eg: logical expression with sorting(_sort), pagination(_p), column filtering (_fields)
 ```
-/api/payments?_where=(amount,gte,1000)&_sort=-amount&p=2&&_fields=customerNumber
+/api/payments?_where=(amount,gte,1000)&_sort=-amount&p=2&_fields=customerNumber
 ```
 
 eg: filter of rows using _where is available for relational route URLs too.
@@ -295,17 +312,17 @@ eg: SELECT country,city,count(*) as _count FROM offices GROUP BY country,city ha
 [:arrow_heading_up:](#api-overview)
 
 ```
-/api/offices/groupby?_fields=country,city&sort=city
+/api/offices/groupby?_fields=country,city&_sort=city
 ```
 eg: SELECT country,city,count(*) FROM offices GROUP BY country,city ORDER BY city ASC
 
 ```
-/api/offices/groupby?_fields=country,city&sort=city,country
+/api/offices/groupby?_fields=country,city&_sort=city,country
 ```
 eg: SELECT country,city,count(*) FROM offices GROUP BY country,city ORDER BY city ASC, country ASC
 
 ```
-/api/offices/groupby?_fields=country,city&sort=city,-country
+/api/offices/groupby?_fields=country,city&_sort=city,-country
 ```
 eg: SELECT country,city,count(*) FROM offices GROUP BY country,city ORDER BY city ASC, country DESC
 
@@ -420,11 +437,11 @@ response body
 ## Chart 
 [:arrow_heading_up:](#api-overview)
 
-:fire::fire: **[ HOTNESS ALERT ]**
+:fire::fire::fire::fire::fire::fire: **[ HOTNESS ALERT ]**
 
 Chart API returns distribution of a numeric column in a table
 
-It comes in three flavours
+It comes in **SIX** powerful flavours
 
 1. Chart : With min, max, step in query params :fire::fire:
 [:arrow_heading_up:](#api-overview)
@@ -539,8 +556,193 @@ Response
 
 ```
 
+4. Chart : range, min, max, step in query params :fire::fire:
+ [:arrow_heading_up:](#api-overview)
+ 
+ This API returns the number of rows where amount is between (0,25000), (0,50000) ... (0,maxValue)
+ 
+ Number of records for amount is counted from min value to extended *Range* instead of incremental steps
+ 
+ ```
+ /api/payments/chart?_fields=amount&min=0&max=131000&step=25000&range=1
+ 
+ Response
+ 
+[
+    {
+        "amount": "0 to 25000",
+        "_count": 107
+    },
+    {
+        "amount": "0 to 50000",
+        "_count": 231
+    },
+    {
+        "amount": "0 to 75000",
+        "_count": 261
+    },
+    {
+        "amount": "0 to 100000",
+        "_count": 268
+    },
+    {
+        "amount": "0 to 125000",
+        "_count": 273
+    }
+]
+ 
+ ```
+
+5. Range can be specified with step array like below
+
+ ```
+/api/payments/chart?_fields=amount&steparray=0,10000,20000,70000,140000&range=1
+
+[
+    {
+        "amount": "0 to 10000",
+        "_count": 42
+    },
+    {
+        "amount": "0 to 20000",
+        "_count": 78
+    },
+    {
+        "amount": "0 to 70000",
+        "_count": 261
+    },
+    {
+        "amount": "0 to 140000",
+        "_count": 273
+    }
+]
+ ```
+ 
+6. Range can be specified without any step params like below
+
+```
+/api/payments/chart?_fields=amount&range=1
+
+[
+    {
+        "amount": "-9860 to 11100",
+        "_count": 45
+    },
+    {
+        "amount": "-9860 to 32060",
+        "_count": 136
+    },
+    ...
+    
+]
+
+```
+
 Please Note:
 _fields in Chart API can only take numeric column as its argument.  
+
+## Autochart
+
+Identifies numeric columns in a table which are not any sort of key and applies chart API as before - 
+feels like magic when there are multiple numeric columns in table while hacking/prototyping and you invoke this API.
+
+```
+http://localhost:3000/api/payments/autochart
+
+[
+    {
+        "column": "amount",
+        "chart": [
+                    {
+                        "amount": "-9860 to 11100",
+                        "_count": 45
+                    },
+                    {
+                        "amount": "11101 to 32060",
+                        "_count": 91
+                    },
+                    {
+                        "amount": "32061 to 53020",
+                        "_count": 109
+                    },
+                    {
+                        "amount": "53021 to 73980",
+                        "_count": 16
+                    },
+                    {
+                        "amount": "73981 to 94940",
+                        "_count": 7
+                    },
+                    {
+                        "amount": "94941 to 115900",
+                        "_count": 3
+                    },
+                    {
+                        "amount": "115901 to 130650",
+                        "_count": 2
+                    }
+                ]
+    }
+]
+```
+
+## XJOIN
+
+Simple example of two table join
+
+```
+
+SELECT *
+FROM productlines as pl
+    JOIN products as pr
+        ON pl.productline = pr.productline
+
+
+
+/api/xjoin?_join=pl.productlines,j,pr.products&_on1=(pl.productline,eq,pr.productline)
+
+
+```
+
+
+###Xjoin Syntax:
+
+```
+_join           :   list of tableNames alternated by type of join to be made (_j,_ij,_lj,_rj,_fj)
+alias.tableName :   tableName as alias
+_j              :   join [ _j => join,_ij => ij,_lj => left join ,_rj => right join ,_fj => full join)
+_onNumber       :   Number indicates condition number for the join 
+``` 
+
+
+
+Multiple tables join
+
+```
+SELECT *
+FROM productlines as pl
+    JOIN products as pr
+        ON pl.productline = pr.productline
+    JOIN orderdetails as ord
+        ON pr.productcode = ord.productcode
+
+
+/api/xjoin?_join=pl.productlines,j,pr.products,j,ord.orderDetails&_on1=(pl.productline,eq,pr.productline)&_on2=(pr.productcode,eq,ord.productcode)
+
+```
+
+**Explanation:**
+> pl.productlines => productlines as pl
+
+> _j => join
+
+> pr.products => products as pl
+
+> _on1 => join condition between productlines and products => (pl.productline,eq,pr.productline)
+
+> _on2 => join condition between products and orderdetails => (pr.productcode,eq,ord.productcode)
+
+
 
 
 ## Run dynamic queries
@@ -548,7 +750,7 @@ _fields in Chart API can only take numeric column as its argument.
 
 Dynamic queries on a database can be run by POST method to URL localhost:3000/dynamic 
 
-This is enabled only when using local mysql server i.e -h localhost or -h 127.0.0.1 option.
+This is enabled **ONLY when using local mysql server** i.e -h localhost or -h 127.0.0.1 option.
 
 Post body takes two fields : query and params.
 
@@ -617,14 +819,14 @@ http://localhost:3000/download?name=fileName
 ## When to use ?
 [:arrow_heading_up:](#api-overview)
 
-* You need just REST APIs without much hassle for (ANY) MySql database.
+* You need just REST APIs for (ANY) MySql database at blink of an eye (literally).
 * You are learning new frontend frameworks and need REST APIs for your MySql database.
 * You are working on a demo, hacks etc
 
 ## When NOT to use ?
 [:arrow_heading_up:](#api-overview)
 
-* If you are in need of a full blown MVC framework, ACL, Authorisation etc - its early days please watch/star this repo. Thank you.
+* If you are in need of a full blown MVC framework, ACL, Validations, Authorisation etc - its early days please watch/star this repo to keep a tab on progress. 
 
 
 ### Command line options
@@ -634,12 +836,13 @@ http://localhost:3000/download?name=fileName
   Options:
 
     -V, --version            output the version number
-    -h, --host <n>           hostname of mysql
-    -d, --database <n>       database schema name
+    -h, --host <n>           hostname / localhost by default
     -u, --user <n>           username of database / root by default
     -p, --password <n>       password of database / empty by default
-    -n, --portNumber <n>     port number / 3000 by default
-    -s, --storageFolder <n>  storage folder / current working dir by default
+    -d, --database <n>       database schema name
+    -n, --portNumber <n>     port number for app / 3000 by default
+    -s, --storageFolder <n>  storage folder / current working dir by default / available only with local
+    -i, --ignoreTables <n>   comma separated table names to ignore
     -h, --help               output usage information
 
   Examples:
