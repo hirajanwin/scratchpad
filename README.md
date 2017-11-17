@@ -688,7 +688,9 @@ http://localhost:3000/api/payments/autochart
 
 ## XJOIN
 
-Simple example of two table join
+Simple example of two table join:
+
+Sql join query:
 
 ```sql
 
@@ -699,6 +701,7 @@ FROM productlines as pl
 
 ```
 
+xjoin query API:
 ```
 /api/xjoin?_join=pl.productlines,j,pr.products&_on1=(pl.productline,eq,pr.productline)
 ```
@@ -717,6 +720,7 @@ _onNumber       :   Number indicates condition number for the join
 
 Multiple tables join
 
+Sql join query:
 ```sql
 SELECT *
 FROM productlines as pl
@@ -725,6 +729,8 @@ FROM productlines as pl
     JOIN orderdetails as ord
         ON pr.productcode = ord.productcode
 ```
+xjoin query API:
+
 ```
 /api/xjoin?_join=pl.productlines,j,pr.products,j,ord.orderDetails&_on1=(pl.productline,eq,pr.productline)&_on2=(pr.productcode,eq,ord.productcode)
 
