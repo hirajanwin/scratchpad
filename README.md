@@ -701,7 +701,7 @@ FROM productlines as pl
 
 ```
 
-xjoin query API:
+Equivalent xjoin query API:
 ```
 /api/xjoin?_join=pl.productlines,j,pr.products&_on1=(pl.productline,eq,pr.productline)
 ```
@@ -729,7 +729,8 @@ FROM productlines as pl
     JOIN orderdetails as ord
         ON pr.productcode = ord.productcode
 ```
-xjoin query API:
+
+Equivalent xjoin query API:
 
 ```
 /api/xjoin?_join=pl.productlines,j,pr.products,j,ord.orderDetails&_on1=(pl.productline,eq,pr.productline)&_on2=(pr.productcode,eq,ord.productcode)
