@@ -688,6 +688,15 @@ http://localhost:3000/api/payments/autochart
 
 ## XJOIN
 
+### Xjoin Syntax:
+
+```
+_join           :   list of tableNames alternated by type of join to be made (_j,_ij,_lj,_rj,_fj)
+alias.tableName :   tableName as alias
+_j              :   join [ _j => join,_ij => ij,_lj => left join ,_rj => right join ,_fj => full join)
+_onNumber       :   Number indicates condition number for the join 
+``` 
+
 #### Simple example of two table join:
 
 Sql join query:
@@ -705,18 +714,6 @@ Equivalent xjoin query API:
 ```
 /api/xjoin?_join=pl.productlines,j,pr.products&_on1=(pl.productline,eq,pr.productline)
 ```
-
-
-### Xjoin Syntax:
-
-```
-_join           :   list of tableNames alternated by type of join to be made (_j,_ij,_lj,_rj,_fj)
-alias.tableName :   tableName as alias
-_j              :   join [ _j => join,_ij => ij,_lj => left join ,_rj => right join ,_fj => full join)
-_onNumber       :   Number indicates condition number for the join 
-``` 
-
-
 
 #### Multiple tables join
 
