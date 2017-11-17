@@ -688,7 +688,7 @@ http://localhost:3000/api/payments/autochart
 
 ## XJOIN
 
-Simple example of two table join:
+#### Simple example of two table join:
 
 Sql join query:
 
@@ -718,7 +718,7 @@ _onNumber       :   Number indicates condition number for the join
 
 
 
-Multiple tables join
+#### Multiple tables join
 
 Sql join query:
 ```sql
