@@ -690,18 +690,17 @@ http://localhost:3000/api/payments/autochart
 
 Simple example of two table join
 
-```
+```sql
 
 SELECT *
 FROM productlines as pl
     JOIN products as pr
         ON pl.productline = pr.productline
 
+```
 
-
+```
 /api/xjoin?_join=pl.productlines,j,pr.products&_on1=(pl.productline,eq,pr.productline)
-
-
 ```
 
 
@@ -718,15 +717,15 @@ _onNumber       :   Number indicates condition number for the join
 
 Multiple tables join
 
-```
+```sql
 SELECT *
 FROM productlines as pl
     JOIN products as pr
         ON pl.productline = pr.productline
     JOIN orderdetails as ord
         ON pr.productcode = ord.productcode
-
-
+```
+```
 /api/xjoin?_join=pl.productlines,j,pr.products,j,ord.orderDetails&_on1=(pl.productline,eq,pr.productline)&_on2=(pr.productcode,eq,ord.productcode)
 
 ```
