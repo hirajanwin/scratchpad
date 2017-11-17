@@ -707,7 +707,7 @@ xjoin query API:
 ```
 
 
-###Xjoin Syntax:
+### Xjoin Syntax:
 
 ```
 _join           :   list of tableNames alternated by type of join to be made (_j,_ij,_lj,_rj,_fj)
