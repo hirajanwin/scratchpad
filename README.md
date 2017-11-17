@@ -691,9 +691,9 @@ http://localhost:3000/api/payments/autochart
 ### Xjoin Syntax:
 
 ```
-_join           :   list of tableNames alternated by type of join to be made (_j,_ij,_lj,_rj,_fj)
+_join           :   list of tableNames alternated by type of join to be made (_j, _ij,_ lj, _rj, _fj)
 alias.tableName :   tableName as alias
-_j              :   join [ _j => join,_ij => ij,_lj => left join ,_rj => right join ,_fj => full join)
+_j              :   join [ _j => join, _ij => ij, _lj => left join , _rj => right join , _fj => full join)
 _onNumber       :   Number indicates condition number for the join 
 ``` 
 
