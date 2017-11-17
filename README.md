@@ -76,7 +76,7 @@ Powered by popular node packages : ([express](https://github.com/expressjs/expre
 * Chart API for numeric column :fire::fire::fire::fire::fire::fire:
 * Auto Chart API - (a gift for lazy while prototyping) :fire::fire::fire::fire::fire::fire:
 * :fire::fire::fire::fire::fire::fire::fire::fire::fire::fire::fire::fire::fire::fire::fire::fire::fire::fire:
-* ## xjoin - (MUST SEE : Handles joins)
+* ### X J O I N - (MUST SEE : Handles joins)
 * :fire::fire::fire::fire::fire::fire::fire::fire::fire::fire::fire::fire::fire::fire::fire::fire::fire::fire:  
 * Supports views  
 * Prototyping (features available when using local MySql server only)
