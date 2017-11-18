@@ -919,4 +919,6 @@ $ mocha tests/*.js --exit
 ```
 
 
-<a class="twitter-timeline" href="https://twitter.com/o1lab?ref_src=twsrc%5Etfw">Tweets by o1lab</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<a class="twitter-timeline" href="https://twitter.com/o1lab?ref_src=twsrc%5Etfw">Tweets by o1lab</a> 
+<script 
+async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
