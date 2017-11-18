@@ -747,8 +747,11 @@ Equivalent xjoin query API:
 
 > _on2 => join condition between products and orderdetails => (pr.productcode,eq,ord.productcode)
 
+Example to use : _fields, _where, _p, _size in query params  
 
-
+```
+/api/xjoin?_join=pl.productlines,_j,pr.products&_on1=(pl.productline,eq,pr.productline)&_fields=pl.productline,pr.productName&_size=2&_where=(productName,like,1972~)
+```
 
 ## Run dynamic queries
 [:arrow_heading_up:](#api-overview)
@@ -914,3 +917,6 @@ mysql> source path_to/xmysql/tests/sample.sql
 ```
 $ mocha tests/*.js --exit
 ```
+
+
+<a class="twitter-timeline" href="https://twitter.com/o1lab?ref_src=twsrc%5Etfw">Tweets by o1lab</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
