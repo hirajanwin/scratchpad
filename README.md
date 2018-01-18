@@ -28,7 +28,10 @@ http://localhost:3000
 ```
 <br>
 
-That is it! Happy hackery! 
+That is it! Simple and minimalistic! 
+
+Happy hackery!
+ 
 <!-- Place this tag where you want the button to render. -->
 
 
@@ -75,16 +78,16 @@ Powered by popular node packages : ([express](https://github.com/expressjs/expre
 * Multiple group by in one API :fire::fire::fire::fire:
 * Chart API for numeric column :fire::fire::fire::fire::fire::fire:
 * Auto Chart API - (a gift for lazy while prototyping) :fire::fire::fire::fire::fire::fire:
-* :fire::fire::fire::fire::fire::fire::fire::fire::fire::fire::fire::fire::fire::fire::fire::fire::fire::fire:
-* ## [XJOIN - (MUST SEE : Handles JOINS)](#xjoin)
-* :fire::fire::fire::fire::fire::fire::fire::fire::fire::fire::fire::fire::fire::fire::fire::fire::fire::fire:  
+* [XJOIN - (Supports any number of JOINS)](#xjoin) :fire::fire::fire::fire::fire::fire::fire::fire::fire:
 * Supports views  
 * Prototyping (features available when using local MySql server only)
     * Run dynamic queries :fire::fire::fire:
     * Upload single file
     * Upload multiple files
     * Download file
-
+* Health and version apis
+* [Docker support](#Docker)
+* [Nginx reverse proxy config](#Nginx-Reverse-Proxy-Config-with-Docker)
 
 Use HTTP clients like [Postman](https://www.getpostman.com/) or [similar tools](https://chrome.google.com/webstore/search/http%20client?_category=apps) to invoke REST API calls
 
@@ -120,15 +123,16 @@ if you haven't on your system.
 | GET :fire:| [/api/tableName/groupby](#group-by-having-as-api)                 | Group by results of column(s)                          |
 | GET :fire:| [/api/tableName/ugroupby](#union-of-multiple-group-by-statements) | Multiple group by results using one call               |
 | GET :fire:| [/api/tableName/chart](#chart)                                    | Numeric column distribution based on (min,max,step) or(step array) or (automagic)|
-| GET :fire:| [/api/tableName/autochart](#autochart)                                | Same as Chart but identifies which are numeric column automatically - gift for lazy while prototyping|
-| GET :fire:| [/api/xjoin](#xjoin)                                       | handles join                                        |
+| GET :fire:| [/api/tableName/autochart](#autochart)                            | Same as Chart but identifies which are numeric column automatically - gift for lazy while prototyping|
+| GET :fire:| [/api/xjoin](#xjoin)                                              | handles join                                        |
 | GET :fire:| [/dynamic](#run-dynamic-queries)                                  | execute dynamic mysql statements with params           |
 | GET :fire:| [/upload](#upload-single-file)                                    | upload single file                                     |
 | GET :fire:| [/uploads](#upload-multiple-files)                                | upload multiple files                                  |
 | GET :fire:| [/download](#download-file)                                       | download a file                                        |
-| GET       | /api/tableName/describe| describe each table for its columns      |
-| GET       | /api/tables| get all tables in database                           |
-
+| GET       | /api/tableName/describe                                           | describe each table for its columns      |
+| GET       | /api/tables                                                       | get all tables in database                           |
+| GET       | [/_health](#health)                                               | gets health of process and mysql -- details query params for more details |
+| GET       | [/_version](#version)                                             | gets version of Xmysql, mysql, node|
 
 
 ## Relational Tables 
@@ -443,7 +447,7 @@ response body
 
 Chart API returns distribution of a numeric column in a table
 
-It comes in **SIX** powerful flavours
+It comes in **SEVEN** powerful flavours
 
 1. Chart : With min, max, step in query params :fire::fire:
 [:arrow_heading_up:](#api-overview)
@@ -516,7 +520,25 @@ Response
 
 ```
 
-3. Chart : with no params :fire::fire:
+3. Chart : With step pairs in params :fire::fire:
+[:arrow_heading_up:](#api-overview)
+
+This API returns distribution between each step pair
+
+```
+/api/payments/chart?_fields=amount&steppair=0,50000,40000,100000
+
+Response
+
+[
+    {"amount":"0 to 50000","_count":231},
+    {"amount":"40000 to 100000","_count":80}
+]
+
+
+```
+
+4. Chart : with no params :fire::fire:
 [:arrow_heading_up:](#api-overview)
 
 This API figures out even distribution of a numeric column in table and returns the data
@@ -558,7 +580,7 @@ Response
 
 ```
 
-4. Chart : range, min, max, step in query params :fire::fire:
+5. Chart : range, min, max, step in query params :fire::fire:
  [:arrow_heading_up:](#api-overview)
  
  This API returns the number of rows where amount is between (0,25000), (0,50000) ... (0,maxValue)
@@ -595,7 +617,7 @@ Response
  
  ```
 
-5. Range can be specified with step array like below
+6. Range can be specified with step array like below
 
  ```
 /api/payments/chart?_fields=amount&steparray=0,10000,20000,70000,140000&range=1
@@ -620,7 +642,7 @@ Response
 ]
  ```
  
-6. Range can be specified without any step params like below
+7. Range can be specified without any step params like below
 
 ```
 /api/payments/chart?_fields=amount&range=1
@@ -690,12 +712,12 @@ http://localhost:3000/api/payments/autochart
 
 ## XJOIN
 
-### Xjoin Syntax:
+### Xjoin query params and values:
 
 ```
-_join           :   List of tableNames alternated by type of join to be made (_j, _ij,_ lj, _rj, _fj)
+_join           :   List of tableNames alternated by type of join to be made (_j, _ij,_ lj, _rj)
 alias.tableName :   TableName as alias
-_j              :   Join [ _j => join, _ij => ij, _lj => left join , _rj => right join , _fj => full join)
+_j              :   Join [ _j => join, _ij => ij, _lj => left join , _rj => right join)
 _onNumber       :   Number 'n' indicates condition to be applied for 'n'th join between (n-1) and 'n'th table in list  
 ``` 
 
@@ -714,7 +736,7 @@ FROM productlines as pl
 
 Equivalent xjoin query API:
 ```
-/api/xjoin?_join=pl.productlines,j,pr.products&_on1=(pl.productline,eq,pr.productline)
+/api/xjoin?_join=pl.productlines,_j,pr.products&_on1=(pl.productline,eq,pr.productline)
 ```
 
 #### Multiple tables join
@@ -732,7 +754,7 @@ FROM productlines as pl
 Equivalent xjoin query API:
 
 ```
-/api/xjoin?_join=pl.productlines,j,pr.products,j,ord.orderDetails&_on1=(pl.productline,eq,pr.productline)&_on2=(pr.productcode,eq,ord.productcode)
+/api/xjoin?_join=pl.productlines,_j,pr.products,_j,ord.orderDetails&_on1=(pl.productline,eq,pr.productline)&_on2=(pr.productcode,eq,ord.productcode)
 
 ```
 
@@ -822,7 +844,55 @@ returns uploaded file names as string
 http://localhost:3000/download?name=fileName
 
 > For upload and download of files -> you can specify storage folder using -s option
-> Upload and download apis are available only with local mysql server 
+> Upload and download apis are available only with local mysql server
+
+## Health 
+[:arrow_heading_up:](#api-overview)
+
+http://localhost:3000/_health
+
+```
+{"process_uptime":3.858,"mysql_uptime":"2595"}
+```
+
+Shows up time of Xmysql process and mysql server
+
+
+http://localhost:3000/_health?details=1
+
+```
+{"process_uptime":1.151,"mysql_uptime":"2798",
+"os_total_memory":17179869184,
+"os_free_memory":2516357120,
+"os_load_average":[2.29931640625,2.1845703125,2.13818359375],
+"v8_heap_statistics":{"total_heap_size":24735744,
+"total_heap_size_executable":5242880,
+"total_physical_size":23521048,
+"total_available_size":1475503064,
+"used_heap_size":18149064,
+"heap_size_limit":1501560832,
+"malloced_memory":8192,
+"peak_malloced_memory":11065664,
+"does_zap_garbage":0}}
+```
+
+Provides more details on process.
+
+Infact passing any query param gives detailed health output: example below  
+
+http://localhost:3000/_health?voila
+```
+{"process_uptime":107.793,"mysql_uptime":"2905","os_total_memory":17179869184,"os_free_memory":2573848576,"os_load_average":[2.052734375,2.12890625,2.11767578125],"v8_heap_statistics":{"total_heap_size":24735744,"total_heap_size_executable":5242880,"total_physical_size":23735016,"total_available_size":1475411128,"used_heap_size":18454968,"heap_size_limit":1501560832,"malloced_memory":8192,"peak_malloced_memory":11065664,"does_zap_garbage":0}}
+```
+
+## Version
+[:arrow_heading_up:](#api-overview)
+
+http://localhost:3000/_version
+
+```
+{"Xmysql":"0.4.1","mysql":"5.7.15","node":"8.2.1"}
+```
 
 ## When to use ?
 [:arrow_heading_up:](#api-overview)
@@ -843,15 +913,17 @@ http://localhost:3000/download?name=fileName
 ```
   Options:
 
-    -V, --version            output the version number
-    -h, --host <n>           hostname / localhost by default
-    -u, --user <n>           username of database / root by default
-    -p, --password <n>       password of database / empty by default
+    -V, --version            Output the version number
+    -h, --host <n>           Hostname of database -> localhost by default
+    -u, --user <n>           Username of database -> root by default
+    -p, --password <n>       Password of database -> empty by default
     -d, --database <n>       database schema name
-    -n, --portNumber <n>     port number for app / 3000 by default
-    -s, --storageFolder <n>  storage folder / current working dir by default / available only with local
-    -i, --ignoreTables <n>   comma separated table names to ignore
-    -h, --help               output usage information
+    -r, --ipAddress <n>      IP interface of your server / locahost by default    
+    -n, --portNumber <n>     Port number for app -> 3000 by default
+    -a, --apiPrefix <n>      Api url prefix -> /api/ by default
+    -s, --storageFolder <n>  Storage folder -> current working dir by default (available only with local)
+    -i, --ignoreTables <n>   Comma separated table names to ignore
+    -h, --help               Output usage information
 
   Examples:
 
@@ -878,20 +950,18 @@ http://localhost:3000/download?name=fileName
 # Docker
 [:arrow_heading_up:](#api-overview)
 
-Simply build with `docker build -t xmysql .` and run with `docker run -p 3000:3000 -d xmysql`
+Simply run with `docker run -p 3000:80 -d markuman/xmysql:0.4.2`
 
 The best way for testing is to run mysql in a docker container too and create a docker network, so that `xmysql` can access the `mysql` container with a name from docker network.
 
 1. Create network 
     * `docker network create mynet`
 2. Start mysql with docker name `some-mysql` and bind to docker network `mynet`
-    * `docker run --name some-mysql -p 3306:3306 --net mynet -e MYSQL_ROOT_PASSWORD=password -d mysql`
-3. build xmysql container (if not done yet)
-    * `docker build -t xmysql .`
-4. run xmysql and set env variable for `some-mysql` from step 2
-    * `docker run -p 3000:3000 -d -e DATABASE_HOST=some-mysql --net mynet xmysql`
+    * `docker run --name some-mysql -p 3306:3306 --net mynet -e MYSQL_ROOT_PASSWORD=password -d markuman/mysql`
+3. run xmysql and set env variable for `some-mysql` from step 2
+    * `docker run -p 3000:80 -d -e DATABASE_HOST=some-mysql --net mynet markuman/xmysql`
 
-You can also pass the environment variables to a file and use them as an option with docker like `docker run --env-file ./env.list -p 3000:3000 --net mynet -d xmysql`
+You can also pass the environment variables to a file and use them as an option with docker like `docker run --env-file ./env.list -p 3000:80 --net mynet -d markuman/xmysql`
 
 environment variables which can be used:
 
@@ -901,6 +971,74 @@ ENV DATABASE_USER root
 ENV DATABASE_PASSWORD password
 ENV DATABASE_NAME sakila
 ```
+
+Furthermore, the docker container of xmysql is listen on port 80. You can than request it just with `http://xmysql/api/` in other services running in the same docker network.
+
+## Debugging xmysql in docker.
+
+Given you've deployed your xmysql docker container like 
+
+```shell
+docker run -d \
+--network local_dev \
+--name xmysql \
+-p 3000:80 \
+-e DATABASE_HOST=mysql_host \
+-e DATABASE_USER=root \
+-e DATABASE_PASSWORD=password \
+-e DATABASE_NAME=sys \
+markuman/xmysql:0.4.2
+```
+
+but the response is just
+
+```json
+["http://127.0.0.1:3000/api/tables","http://127.0.0.1:3000/api/xjoin"]
+```
+
+then obviously the connection to your mysql database failed.  
+
+1. attache to the xmysql image
+    * `docker exec -ti xmysql`
+2. install mysql cli client
+    * `apk --update --no-cache add mysql-client`
+3. try to access your mysql database
+   * `mysql-client -h mysql_host`
+4. profit from the `mysql-client` error output and improve the environment variables for mysql
+
+# Nginx Reverse Proxy Config with Docker
+
+This is a config example when you use nginx as reverse proxy
+
+```
+events {
+   worker_connections 1024;
+   
+}
+http {
+    server {
+        server_name 127.0.0.1;
+        listen 80 ;
+        location / {
+            rewrite ^/(.*) /$1 break;
+            proxy_redirect off;
+            proxy_set_header Host $host;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_pass http://127.0.0.1:3000;
+        }
+    }
+}
+```
+
+e.g.
+
+0. create a docker network `docker network create local_dev`
+1. start a mysql server `docker run -d --name mysql -p 3306:3306 --network local_dev -e MYSQL_ROOT_PASSWORD=password mysql`
+2. start xmysql `docker run -d --network local_dev --name xmyxql -e DATABASE_NAME=sys -e DATABASE_HOST=mysql -p 3000:80 markuman/xmysql:0.4.2`
+3. start nginx on host system with the config above `sudo nginx -g 'daemon off;' -c /tmp/nginx.conf`
+4. profit `curl http://127.0.0.1/api/host_summary_by_file_io_type/describe`
+
+When you start your nginx proxy in a docker container too, use as `proxy_pass` the `--name` value of xmysql. E.g. `proxy_pass http://xmysql` (remember, xmysql runs in it's docker container already on port 80).
 
 
 # Tests : setup on local machine
@@ -918,7 +1056,3 @@ mysql> source path_to/xmysql/tests/sample.sql
 $ mocha tests/*.js --exit
 ```
 
-
-<a class="twitter-timeline" href="https://twitter.com/o1lab?ref_src=twsrc%5Etfw">Tweets by o1lab</a> 
-<script 
-async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
