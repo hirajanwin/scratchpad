@@ -86,8 +86,8 @@ Powered by popular node packages : ([express](https://github.com/expressjs/expre
     * Upload multiple files
     * Download file
 * Health and version apis
-* [Docker support](#docker)
-* [Nginx reverse proxy config](#nginx-reverse-proxy-config-with-docker)
+* [Docker support](#docker) :fire::fire:  
+* [Nginx reverse proxy config](#nginx-reverse-proxy-config-with-docker) :fire::fire:  
 
 Use HTTP clients like [Postman](https://www.getpostman.com/) or [similar tools](https://chrome.google.com/webstore/search/http%20client?_category=apps) to invoke REST API calls
 
@@ -948,7 +948,7 @@ http://localhost:3000/_version
 
 
 # Docker
-[:arrow_heading_up:](#api-overview)
+[:arrow_heading_up:](#features)
 
 Simply run with `docker run -p 3000:80 -d markuman/xmysql:0.4.2`
 
@@ -1007,6 +1007,7 @@ then obviously the connection to your mysql database failed.
 4. profit from the `mysql-client` error output and improve the environment variables for mysql
 
 # Nginx Reverse Proxy Config with Docker
+[:arrow_heading_up:](#features)
 
 This is a config example when you use nginx as reverse proxy
 
