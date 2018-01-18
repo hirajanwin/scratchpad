@@ -86,8 +86,8 @@ Powered by popular node packages : ([express](https://github.com/expressjs/expre
     * Upload multiple files
     * Download file
 * Health and version apis
-* [Docker support](#Docker)
-* [Nginx reverse proxy config](#Nginx-Reverse-Proxy-Config-with-Docker)
+* [Docker support](#docker)
+* [Nginx reverse proxy config](#nginx-reverse-proxy-config-with-docker)
 
 Use HTTP clients like [Postman](https://www.getpostman.com/) or [similar tools](https://chrome.google.com/webstore/search/http%20client?_category=apps) to invoke REST API calls
 
